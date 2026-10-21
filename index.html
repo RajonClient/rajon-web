@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rajon Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0b0c;
+    --panel: #161617;
+    --line: #2a2a2d;
+    --text: #e6e8eb;
+    --muted: #9aa0a6;
+    --blue: #3b82f6;
+    --cyan: #06b6d4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Inter, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  a, button, input { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  header {
+    text-align: center;
+    padding: 56px 20px 40px;
+    background: linear-gradient(180deg, #0f1a2e 0%, #0b0b0c 100%);
+    border-bottom: 1px solid #1e3a6e;
+  }
+  header h1 {
+    font-family: Rajdhani, Inter, sans-serif;
+    font-size: clamp(2.6rem, 8vw, 4.2rem);
+    color: var(--blue);
+    text-shadow: 0 0 22px rgba(59,130,246,.65);
+    letter-spacing: 1px;
+  }
+  header .tagline { margin-top: 22px; color: #c9ced4; }
+  header .count { margin-top: 18px; font-weight: 600; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 22px 20px 60px; }
+
+  .search {
+    display: block;
+    max-width: 560px;
+    margin: 0 auto 36px;
+  }
+  .search input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    background: #141415 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%239aa0a6' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") 16px center no-repeat;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: .95rem;
+  }
+  .search input::placeholder { color: #6b7075; }
+
+  h2.section {
+    border-left: 3px solid var(--cyan);
+    padding-left: 12px;
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+  }
+
+  .row {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 14px;
+    scroll-snap-type: x proximity;
+  }
+  .row::-webkit-scrollbar { height: 8px; }
+  .row::-webkit-scrollbar-thumb { background: #3a3a3e; border-radius: 4px; }
+
+  .card {
+    flex: 0 0 min(340px, 82vw);
+    scroll-snap-align: start;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px 20px 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 250px;
+  }
+  .card:hover { border-color: var(--cyan); }
+
+  .avatar {
+    width: 62px; height: 62px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 1.35rem; color: #fff;
+    border: 3px solid rgba(255,255,255,.18);
+  }
+  .card h3 { margin-top: 16px; font-size: 1.15rem; }
+  .card p { margin-top: 14px; color: #c9ced4; font-size: .9rem; flex: 1; }
+  .card button {
+    margin-top: 16px;
+    background: none; border: 0; cursor: pointer;
+    color: var(--cyan); font-weight: 600; font-size: .95rem;
+  }
+  .card button:hover { text-decoration: underline; }
+
+  .empty { color: var(--muted); padding: 30px 0; }
+
+  dialog {
+    margin: auto;
+    width: min(440px, 92vw);
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 28px;
+  }
+  dialog::backdrop { background: rgba(0,0,0,.7); }
+  dialog .avatar { margin: 0 auto; }
+  dialog h3 { text-align: center; margin: 14px 0 6px; font-size: 1.3rem; }
+  dialog .desc { text-align: center; color: #c9ced4; font-size: .92rem; }
+  dialog dl {
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    font-size: .9rem;
+  }
+  dialog dt { color: var(--muted); }
+  .actions { display: flex; gap: 10px; }
+  .actions a, .actions button {
+    flex: 1; text-align: center; padding: 11px 14px;
+    border-radius: 6px; font-weight: 600; font-size: .95rem;
+    cursor: pointer; text-decoration: none;
+  }
+  .download { background: var(--cyan); color: #04252b; border: 0; }
+  .download:hover { background: #22c5e0; }
+  .close { background: none; color: var(--text); border: 1px solid var(--line); }
+  .close:hover { border-color: var(--muted); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card { transition: border-color .15s; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Rajon Hub</h1>
+  <p class="tagline">Nơi tải các client Minecraft do Rajon phát hành.</p>
+  <p class="count">Tổng số client: <span id="total">0</span></p>
+</header>
+
+<main>
+  <label class="search">
+    <span class="sr" hidden>Tìm kiếm client</span>
+    <input id="q" type="search" placeholder="Tìm kiếm client..." autocomplete="off">
+  </label>
+
+  <h2 class="section">Client nổi bật</h2>
+  <div class="row" id="row"></div>
+</main>
+
+<dialog id="dlg">
+  <div class="avatar" id="d-avatar"></div>
+  <h3 id="d-name"></h3>
+  <p class="desc" id="d-desc"></p>
+  <dl>
+    <dt>Phiên bản client</dt><dd id="d-ver"></dd>
+    <dt>Minecraft</dt><dd id="d-mc"></dd>
+    <dt>Java</dt><dd id="d-java"></dd>
+  </dl>
+  <div class="actions">
+    <a class="download" id="d-link" target="_blank" rel="noopener">Tải xuống</a>
+    <button class="close" id="d-close" type="button">Đóng</button>
+  </div>
+</dialog>
+
+<script>
+  // === THÊM CLIENT MỚI: copy một khối { ... } bên dưới rồi sửa thông tin ===
+  const clients = [
+    {
+      name: "Rajon Client",
+      initials: "RC",
+      color: "#3b82f6",
+      desc: "Client Minecraft do Rajon phát triển.",
+      version: "1.0",
+      mc: "Chưa cập nhật",
+      java: "Chưa cập nhật",
+      link: "https://www.mediafire.com/file/r3owwywkmi6iw56/rajonclient-1.0.jar/file"
+    },
+    {
+      name: "Rinbounce+",
+      initials: "R+",
+      color: "#8b5cf6",
+      desc: "Client Minecraft Rinbounce+ (bản Reborn).",
+      version: "1.0.0",
+      mc: "Chưa cập nhật",
+      java: "Chưa cập nhật",
+      link: "https://www.mediafire.com/file/c2qb92mmqssfxcs/rinbouncereborn-1.0.0.jar/file"
+    }
+  ];
+
+  const $ = id => document.getElementById(id);
+  const row = $("row"), dlg = $("dlg");
+
+  $("total").textContent = clients.length;
+
+  function render(list) {
+    row.innerHTML = "";
+    if (!list.length) {
+      row.innerHTML = '<p class="empty">Không tìm thấy client nào.</p>';
+      return;
+    }
+    list.forEach(c => {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.innerHTML =
+        '<div class="avatar"></div><h3></h3><p></p>' +
+        '<button type="button">Xem chi tiết ›</button>';
+      const av = card.querySelector(".avatar");
+      av.textContent = c.initials;
+      av.style.background = c.color;
+      card.querySelector("h3").textContent = c.name;
+      card.querySelector("p").textContent = c.desc;
+      card.querySelector("button").addEventListener("click", () => open(c));
+      row.appendChild(card);
+    });
+  }
+
+  function open(c) {
+    const av = $("d-avatar");
+    av.textContent = c.initials;
+    av.style.background = c.color;
+    $("d-name").textContent = c.name;
+    $("d-desc").textContent = c.desc;
+    $("d-ver").textContent = c.version;
+    $("d-mc").textContent = c.mc;
+    $("d-java").textContent = c.java;
+    $("d-link").href = c.link;
+    dlg.showModal();
+  }
+
+  $("d-close").addEventListener("click", () => dlg.close());
+  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+
+  $("q").addEventListener("input", e => {
+    const k = e.target.value.trim().toLowerCase();
+    render(clients.filter(c => c.name.toLowerCase().includes(k)));
+  });
+
+  render(clients);
+</script>
+</body>
+</html>
