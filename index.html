@@ -98,6 +98,16 @@
   }
   .card h3 { margin-top: 16px; font-size: 1.15rem; }
   .card p { margin-top: 12px; color: #c9ced4; font-size: .9rem; flex: 1; }
+  .card .note {
+    margin-top: 12px;
+    padding: 6px 12px;
+    background: #0b0b0c;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: .85rem;
+    color: #7dd3fc;
+  }
   .card .dl {
     margin-top: 16px;
     padding: 10px 28px;
@@ -164,6 +174,14 @@
       color: "#f59e0b",
       desc: "Client Minecraft RinBounce b1.2 cho Minecraft 1.8.9.",
       link: "https://www.mediafire.com/file/ssba7fhq8o42zam/rinbounce-b1.2-mc1.8.9-8cf76db.jar/file"
+    },
+    {
+      name: "Rise",
+      initials: "RS",
+      color: "#ec4899",
+      desc: "Client Minecraft Rise.",
+      note: "./gradlew run",
+      link: "https://workupload.com/file/V8LVGMwNBQt"
     }
   ];
 
@@ -186,6 +204,12 @@
       av.style.background = c.color;
       card.querySelector("h3").textContent = c.name;
       card.querySelector("p").textContent = c.desc;
+      if (c.note) {
+        const n = document.createElement("code");
+        n.className = "note";
+        n.textContent = c.note;
+        card.querySelector("p").after(n);
+      }
       card.querySelector(".dl").href = c.link;
       row.appendChild(card);
     });
